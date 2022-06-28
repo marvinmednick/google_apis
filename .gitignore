@@ -1,3 +1,12 @@
+# creditial file is private
+credentials.json
+
+# general file for capture output for review
+output
+
+# currrent login token
+token.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
