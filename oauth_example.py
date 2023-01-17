@@ -17,7 +17,7 @@ CLIENT_SECRETS_FILE = "client_secret.json"
 # authenticated user's account and requires requests to use an SSL connection.
 SCOPES = [
         'https://www.googleapis.com/auth/drive.metadata.readonly',
-        'https://www.googleapis.com/auth/documents.readonly',
+        #        'https://www.googleapis.com/auth/documents.readonly',
         ]
 API_SERVICE_NAME = 'drive'
 API_VERSION = 'v2'
@@ -88,11 +88,13 @@ def authorize():
 def oauth2callback():
   # Specify the state when creating the flow in the callback so that it can
   # verified in the authorization server response.
-  app.logger.info("Got to callback")
+  updated_scope = flask.request.args.get('scope')
+  if updated_scope != SCOPES:
+      app.logger.info(f"Revised Scope {flask.request.args.get('scope')}")
   state = flask.session['state']
 
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+      CLIENT_SECRETS_FILE, scopes=updated_scope, state=state)
   flow.redirect_uri = flask.url_for('oauth2callback', _external=True)
 
   # Use the authorization server's response to fetch the OAuth 2.0 tokens.
